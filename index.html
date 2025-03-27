@@ -1,70 +1,149 @@
-// Modal Handling for Chatbot
-const modal = document.getElementById("chatbotModal");
-const chatbotBtn = document.getElementById("chatbotBtn");
-const closeBtn = document.querySelector(".close");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M Likhitha | Professional Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="profile">
+        <img src="photo.jpg" alt="M Likhitha" />
+        <div class="profile-info">
+          <h1>M Likhitha</h1>
+          <p>3rd Year B.Tech Student | EECE, IIT Dharwad</p>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#certifications">Certifications</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#" id="chatbotBtn">Chatbot</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-chatbotBtn.onclick = () => { modal.style.display = "block"; };
-closeBtn.onclick = () => { modal.style.display = "none"; };
-window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+  <!-- Main Content -->
+  <main class="container">
+    <!-- About Section -->
+    <section id="about">
+      <h2>About Me</h2>
+      <p>
+        I am a 3rd year B.Tech student specializing in EECE at IIT Dharwad.
+        I have experience as a Teaching Assistant and have completed projects in GPS tracking and system modeling.
+        I combine technical expertise in programming, electronics, and data analysis to deliver innovative solutions.
+      </p>
+    </section>
 
-// Chatbot Logic
-const chatArea = document.getElementById("chatArea");
-const userInput = document.getElementById("userInput");
-const sendBtn = document.getElementById("sendBtn");
+    <!-- Education Section -->
+    <section id="education">
+      <h2>Education</h2>
+      <ul>
+        <li>
+          <strong>B.Tech in EECE</strong> – IIT Dharwad (2022-Present) | CPI: 7.01
+        </li>
+        <li>
+          <strong>HSC</strong> – Narayana Junior College (2022) | Percentage: 97.2%
+        </li>
+        <li>
+          <strong>SSC</strong> – Red Cherries High School (2020) | Percentage: 99.5%
+        </li>
+      </ul>
+    </section>
 
-// Mapping of keywords to resume details.
-const responses = [
-  {
-    keywords: ["experience", "teaching assistant", "nxtwave"],
-    response: "I worked as a Teaching Assistant at NxtWave (May 2024 to Aug 2024) where I solved around 300 student doubts and refined my debugging skills."
-  },
-  {
-    keywords: ["gps", "tracker", "location"],
-    response: "I developed a GPS Tracker project using TinyGPS++, 4G GSM for data transmission, and a web interface with Leaflet.js for real-time tracking."
-  },
-  {
-    keywords: ["electrolyzer", "model", "matlab"],
-    response: "I modeled an electrolyzer in Matlab to simulate hydrogen production efficiency, validating the results with theoretical and experimental data."
-  },
-  {
-    keywords: ["skills", "technical"],
-    response: "My technical skills include C, C++, Python, HTML, CSS, SQL, Node.js, and JavaScript along with tools like VS Code, Jupyter Notebook, and frameworks like Bootstrap."
-  },
-  {
-    keywords: ["education", "iit", "dharwad"],
-    response: "I'm pursuing a B.Tech in EECE at IIT Dharwad (2022-Present) with a CPI of 7.01."
-  },
-  {
-    keywords: ["certification", "html", "css", "javascript"],
-    response: "I have certifications in HTML, CSS, Bootstrap, FlexBox, JavaScript, SQL, and Python."
-  }
-];
+    <!-- Experience Section -->
+    <section id="experience">
+      <h2>Experience</h2>
+      <h3>Teaching Assistant at NxtWave</h3>
+      <p>May 2024 to Aug 2024</p>
+      <ul>
+        <li>Solved around 300 doubts for students studying Full Stack development.</li>
+        <li>Enhanced debugging and communication skills.</li>
+      </ul>
+    </section>
 
-sendBtn.addEventListener("click", () => {
-  const query = userInput.value.toLowerCase().trim();
-  if (!query) return;
-  
-  // Display user's query
-  const userDiv = document.createElement("div");
-  userDiv.textContent = "You: " + userInput.value;
-  chatArea.appendChild(userDiv);
-  
-  // Determine the appropriate bot response based on keywords
-  let botResponse = "I'm not sure about that. Can you ask about my education, experience, projects, or skills?";
-  for (const pair of responses) {
-    if (pair.keywords.some(keyword => query.includes(keyword))) {
-      botResponse = pair.response;
-      break;
-    }
-  }
-  
-  // Display bot response
-  const botDiv = document.createElement("div");
-  botDiv.textContent = "Bot: " + botResponse;
-  botDiv.style.marginTop = "10px";
-  chatArea.appendChild(botDiv);
-  
-  // Clear input and scroll to the bottom
-  userInput.value = "";
-  chatArea.scrollTop = chatArea.scrollHeight;
-});
+    <!-- Projects Section -->
+    <section id="projects">
+      <h2>Projects</h2>
+      <div class="project">
+        <h3>GPS Tracker <span class="project-tag">[Prof. Abhijit]</span></h3>
+        <p>
+          Developed a GPS data collection system using TinyGPS++ and a 4G GSM module, integrated with the ThingSpeak API.
+          Built a web interface using Leaflet.js for real-time visualization.
+        </p>
+        <p>
+          <strong>Technologies:</strong> HTML, JavaScript, Leaflet.js, ThingSpeak API, OpenStreetMap.
+        </p>
+        <a href="https://peg-iitdh.github.io/EDL2025-GPSTracker/" target="_blank">Live Demo</a>
+      </div>
+      <div class="project">
+        <h3>Modelling of an Electrolyzer <span class="project-tag">[Prof. Animesh Kumar Sahoo]</span></h3>
+        <p>
+          Developed a computational model in Matlab to simulate hydrogen production efficiency.
+          Validated results with theoretical and experimental data.
+        </p>
+        <p>
+          <strong>Technologies:</strong> Matlab, Simulation Tools.
+        </p>
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications">
+      <h2>Certifications</h2>
+      <ul>
+        <li>HTML, CSS, Bootstrap</li>
+        <li>FlexBox</li>
+        <li>JavaScript</li>
+        <li>SQL</li>
+        <li>Python</li>
+      </ul>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+      <h2>Technical Skills</h2>
+      <ul>
+        <li><strong>Languages:</strong> C, C++, Python, HTML, CSS, SQL, Node.js, JavaScript</li>
+        <li><strong>Tools:</strong> Jupyter Notebook, LaTeX, VS Code, Postman, FlexBox</li>
+        <li>
+          <strong>Frameworks & Libraries:</strong> Pandas, NumPy, LTspice, Matplotlib, MATLAB,
+          Ngspice, Bootstrap
+        </li>
+      </ul>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>
+        Email: <a href="mailto:220020032@iitdh.ac.in">220020032@iitdh.ac.in</a><br />
+        LinkedIn: <a href="https://www.linkedin.com/in/magham-likhitha?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">View Profile</a>
+      </p>
+    </section>
+  </main>
+
+  <!-- Chatbot Modal -->
+  <div id="chatbotModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Resume Chatbot</h2>
+      <div id="chatArea"></div>
+      <input type="text" id="userInput" placeholder="Ask about my experience, skills, or projects" />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
