@@ -2,30 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>M Likhitha | Professional Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M Likhitha | Full Stack Developer</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="header-container">
-      <div class="profile">
+  <!-- Fixed Navigation / Header -->
+  <header id="header">
+    <div class="header-inner">
+      <div class="logo">
         <img src="photo.jpg" alt="M Likhitha" />
-        <div class="profile-info">
-          <h1>M Likhitha</h1>
-          <p>3rd Year B.Tech Student | EECE, IIT Dharwad</p>
-        </div>
       </div>
       <nav>
         <ul>
+          <li><a href="#home">Home</a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#education">Education</a></li>
-          <li><a href="#experience">Experience</a></li>
           <li><a href="#projects">Projects</a></li>
-          <li><a href="#certifications">Certifications</a></li>
-          <li><a href="#skills">Skills</a></li>
           <li><a href="#contact">Contact</a></li>
           <li><a href="#" id="chatbotBtn">Chatbot</a></li>
         </ul>
@@ -33,105 +26,94 @@
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="container">
-    <!-- About Section -->
-    <section id="about">
+  <!-- Hero Section (Front Page) -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>I'm M Likhitha,</h1>
+        <h2>Full Stack Developer</h2>
+        <p>
+          I craft robust and scalable solutions—from modern front-end interfaces 
+          to efficient back-end infrastructure—with great user experiences.
+        </p>
+        <a href="#projects" class="hero-btn">View My Work</a>
+      </div>
+      <div class="hero-image">
+        <!-- Replace 'photo.jpg' with your actual image filename -->
+        <img src="photo.jpg" alt="M Likhitha" />
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="content-section">
+    <div class="section-container">
       <h2>About Me</h2>
       <p>
-        I am a 3rd year B.Tech student specializing in EECE at IIT Dharwad.
-        I have experience as a Teaching Assistant and have completed projects in GPS tracking and system modeling.
-        I combine technical expertise in programming, electronics, and data analysis to deliver innovative solutions.
+        I am a passionate 3rd-year B.Tech student at IIT Dharwad specializing in EECE.
+        I blend technical skills in programming, electronics, and data analysis to build end-to-end solutions.
       </p>
-    </section>
+    </div>
+  </section>
 
-    <!-- Education Section -->
-    <section id="education">
+  <!-- Education Section -->
+  <section id="education" class="content-section">
+    <div class="section-container">
       <h2>Education</h2>
-      <ul>
-        <li>
-          <strong>B.Tech in EECE</strong> – IIT Dharwad (2022-Present) | CPI: 7.01
-        </li>
-        <li>
-          <strong>HSC</strong> – Narayana Junior College (2022) | Percentage: 97.2%
-        </li>
-        <li>
-          <strong>SSC</strong> – Red Cherries High School (2020) | Percentage: 99.5%
-        </li>
-      </ul>
-    </section>
+      <div class="cards">
+        <div class="card">
+          <h3>B.Tech in EECE</h3>
+          <p>IIT Dharwad (2022-Present) <br />CPI: 7.01</p>
+        </div>
+        <div class="card">
+          <h3>HSC</h3>
+          <p>Narayana Junior College (2022) <br />97.2%</p>
+        </div>
+        <div class="card">
+          <h3>SSC</h3>
+          <p>Red Cherries High School (2020) <br />99.5%</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Experience Section -->
-    <section id="experience">
+  <!-- Experience Section -->
+  <section id="experience" class="content-section">
+    <div class="section-container">
       <h2>Experience</h2>
-      <h3>Teaching Assistant at NxtWave</h3>
-      <p>May 2024 to Aug 2024</p>
-      <ul>
-        <li>Solved around 300 doubts for students studying Full Stack development.</li>
-        <li>Enhanced debugging and communication skills.</li>
-      </ul>
-    </section>
+      <div class="experience">
+        <h3>Teaching Assistant at NxtWave</h3>
+        <span class="duration">May 2024 - Aug 2024</span>
+        <ul>
+          <li>Solved around 300 student doubts in Full Stack development.</li>
+          <li>Enhanced debugging and communication skills.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-    <!-- Projects Section -->
-    <section id="projects">
+  <!-- Projects Section -->
+  <section id="projects" class="content-section alt-bg">
+    <div class="section-container">
       <h2>Projects</h2>
       <div class="project">
-        <h3>GPS Tracker <span class="project-tag">[Prof. Abhijit]</span></h3>
+        <h3>GPS Tracker <small>[Prof. Abhijit]</small></h3>
         <p>
-          Developed a GPS data collection system using TinyGPS++ and a 4G GSM module, integrated with the ThingSpeak API.
-          Built a web interface using Leaflet.js for real-time visualization.
+          Developed a GPS data collection system using TinyGPS++ and a 4G GSM module, integrated with the ThingSpeak API for real-time tracking.
         </p>
-        <p>
-          <strong>Technologies:</strong> HTML, JavaScript, Leaflet.js, ThingSpeak API, OpenStreetMap.
-        </p>
-        <a href="https://peg-iitdh.github.io/EDL2025-GPSTracker/" target="_blank">Live Demo</a>
+        <p><a href="https://peg-iitdh.github.io/EDL2025-GPSTracker/" target="_blank" class="hero-btn">Live Demo</a></p>
       </div>
-      <div class="project">
-        <h3>Modelling of an Electrolyzer <span class="project-tag">[Prof. Animesh Kumar Sahoo]</span></h3>
-        <p>
-          Developed a computational model in Matlab to simulate hydrogen production efficiency.
-          Validated results with theoretical and experimental data.
-        </p>
-        <p>
-          <strong>Technologies:</strong> Matlab, Simulation Tools.
-        </p>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Certifications Section -->
-    <section id="certifications">
-      <h2>Certifications</h2>
-      <ul>
-        <li>HTML, CSS, Bootstrap</li>
-        <li>FlexBox</li>
-        <li>JavaScript</li>
-        <li>SQL</li>
-        <li>Python</li>
-      </ul>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills">
-      <h2>Technical Skills</h2>
-      <ul>
-        <li><strong>Languages:</strong> C, C++, Python, HTML, CSS, SQL, Node.js, JavaScript</li>
-        <li><strong>Tools:</strong> Jupyter Notebook, LaTeX, VS Code, Postman, FlexBox</li>
-        <li>
-          <strong>Frameworks & Libraries:</strong> Pandas, NumPy, LTspice, Matplotlib, MATLAB,
-          Ngspice, Bootstrap
-        </li>
-      </ul>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
+  <!-- Contact Section -->
+  <section id="contact" class="content-section">
+    <div class="section-container">
       <h2>Contact</h2>
-      <p>
-        Email: <a href="mailto:220020032@iitdh.ac.in">220020032@iitdh.ac.in</a><br />
-        LinkedIn: <a href="https://www.linkedin.com/in/magham-likhitha?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">View Profile</a>
-      </p>
-    </section>
-  </main>
+      <p>Email: <a href="mailto:220020032@iitdh.ac.in">220020032@iitdh.ac.in</a></p>
+      <p>LinkedIn: <a href="https://www.linkedin.com/in/magham-likhitha" target="_blank">View Profile</a></p>
+    </div>
+  </section>
 
   <!-- Chatbot Modal -->
   <div id="chatbotModal" class="modal">
@@ -143,7 +125,5 @@
       <button id="sendBtn">Send</button>
     </div>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
