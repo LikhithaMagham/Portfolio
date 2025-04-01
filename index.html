@@ -1,130 +1,661 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>M Likhitha | Full Stack Developer</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bus tracking website (Beta Testing)</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Raleway', sans-serif;
+      background: #f0f0f0;
+      overflow: hidden;
+    }
+    .full-height{
+      height: 80vh;
+    }
+    .map-container {
+      background: #fff;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+    .map-sidebar-cont{
+        margin-bottom: 0px;
+        overflow: hidden;
+    }
+    .sidebar {
+      flex: 1;
+      padding: 20px;
+      background: linear-gradient(145deg, #fafafa, #f0f0f0);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+    }
+    .sidebar h2 {
+      margin-top: 0;
+      color: #d42e2e;
+    }
+    .sidebar p {
+      color: #555;
+      text-align: center;
+    }
+    .sidebar .updated-time {
+      color: #3498db;
+      font-family: 'Roboto', sans-serif;
+      letter-spacing: 0.5px;
+    }
+    
+    .yes{
+      display: none;
+    }
+    header{
+        background-color: #fff;
+        padding: 15px 0;
+        text-align: center;
+    }
+    header .container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0px;
+    }
+    .info-box {
+        background: #eef2f3;
+        padding: 15px;
+        text-align: center;
+        width: 250px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .roll-number{
+        font-family: Sans-Serif;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 3px 8px;
+      font-size: 12px;
+    }
+    
+    @media (max-width: 767.98px) {
+      .map-container {
+        width: 100%;
+        height: 60%;
+      }
+      .info-box {
+            width: 100%;
+            height: 20%;
+            font-size: 10px;
+            padding: 10px;
+            margin-top: 10px;
+            line-height: 7px;
+      }
+      .info-box h4{
+            font-size: 15px;
+      }
+      header{
+            height: 10%;
+      }
+      .sidebar {
+        width: 100%;
+        height: 25%;
+        font-size: 14px;
+        padding-top: 20px;
+        justify-content: center;
+        line-height: 10px;
+        padding: 5px;
+      }
+      .container{
+            align-items: center;
+      }
+      .container-fluid{
+            align-items: center;
+            background-color: #fff;
+        padding-right: 0px;
+        padding-left: 0px;
+      }
+      .image-container{
+            height: 50px;
+            width: 50px;
+        }
+        .image-text{
+            color: red;
+            font-size: 13px;
+            padding-right: 15px;
+        }
+    }
+
+    /* Desktop: both columns take full height */
+    @media (min-width: 768px) {
+      .map-container {
+        width: 50%;
+        height: 90%;
+      }
+      .sidebar {
+        width: 50%;
+        height: 90%;
+        font-size: 18px;
+        justify-content: center;
+        padding: 5px;
+      }
+      .image-container{
+            height: 70px;
+            width: 70px;
+            padding-right: 30px;
+        }
+        .info-box {
+            width: 100%;
+            font-size: 12px;
+            padding: 8px;
+            margin-top: -15px;
+        }
+        .image-text{
+            color: red;
+            font-size: 30px;
+            padding-left: 10px;
+        }
+    }
+
+  </style>
 </head>
 <body>
-  <!-- Fixed Navigation / Header -->
-  <header id="header">
-    <div class="header-inner">
-      <div class="logo">
-        <img src="photo.jpg" alt="M Likhitha" />
-      </div>
-      <nav>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="#" id="chatbotBtn">Chatbot</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero Section (Front Page) -->
-  <section id="home" class="hero">
-    <div class="hero-content">
-      <div class="hero-text">
-        <h1>I'm M Likhitha,</h1>
-        <h2>Full Stack Developer</h2>
-        <p>
-          I craft robust and scalable solutions—from modern front-end interfaces 
-          to efficient back-end infrastructure—with great user experiences.
-        </p>
-        <a href="#projects" class="hero-btn">View My Work</a>
-      </div>
-      <div class="hero-image">
-        <!-- Replace 'photo.jpg' with your actual image filename -->
-        <img src="photo.jpg" alt="M Likhitha" />
-      </div>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section id="about" class="content-section">
-    <div class="section-container">
-      <h2>About Me</h2>
-      <p>
-        I am a passionate 3rd-year B.Tech student at IIT Dharwad specializing in EECE.
-        I blend technical skills in programming, electronics, and data analysis to build end-to-end solutions.
-      </p>
-    </div>
-  </section>
-
-  <!-- Education Section -->
-  <section id="education" class="content-section">
-    <div class="section-container">
-      <h2>Education</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>B.Tech in EECE</h3>
-          <p>IIT Dharwad (2022-Present) <br />CPI: 7.01</p>
+    <header>
+        <div class="container d-flex flex-row">
+            <img class="image-container" src="https://res.cloudinary.com/dnpmv0lyk/image/upload/v1741624989/IITDHLOGO_lxqysu.jpg"/>
+            <h2 class="image-text">Bus Tracking webpage (Beta Testing)</h2>
         </div>
-        <div class="card">
-          <h3>HSC</h3>
-          <p>Narayana Junior College (2022) <br />97.2%</p>
+    </header>
+    <div class="container-fluid map-sidebar-cont">
+      <div class="d-flex flex-column flex-md-row full-height">
+        <div class="map-container">
+          <div id="map"></div>
         </div>
-        <div class="card">
-          <h3>SSC</h3>
-          <p>Red Cherries High School (2020) <br />99.5%</p>
+        <div class="sidebar">
+          <p>Status: <span class="updated-time" id="Status">Loading...</span></p>
+          <p>Last Updated: <span class="updated-time" id="lastUpdate">Loading...</span></p>
+          <p>Current Speed: <span class="updated-time" id="Speed">Calculating...</span></p>
+          <div>
+              <p id="repMsg"></p>
+              <p id="heading">Upcoming Stops:</p>
+              <p class="updated-time" id="Nextstop">...</p>
+              <p class="updated-time" id="next1stop">...</p>
+              <p class="updated-time" id="next2stops">...</p>
+          </div>
+          <div class="dropdown">
+            <button>Enable Notification <span id="notificationBadge" class="notification-badge" style="display: none;"></span></button>
+            <div class="dropdown-content">
+              <a href="#" data-stop="Hostel PC">Hostel PC</a>
+              <a href="#" data-stop="Main Gate">Main Gate</a>
+              <a href="#" data-stop="New Bus Stand Dharwad">New Bus Stand</a>
+              <a href="#" data-stop="A1-A2 Block">A1-A2</a>
+              <a href="#" data-stop="Bhoopali">Bhoopali</a>
+              <a href="#" data-stop="Jubli Circle">Jubli Circle</a>
+              <a href="#" data-stop="CLT Stop">CLT</a>
+            </div>
+          </div>
+          <p>We’d love your <a href="https://docs.google.com/forms/d/e/1FAIpQLSfe4h1xcUioc9UhPIDOdPLUyA-j3fb5H2R8MfTnoNL_fF9_KQ/viewform?usp=dialog">Feedback!</a></p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Experience Section -->
-  <section id="experience" class="content-section">
-    <div class="section-container">
-      <h2>Experience</h2>
-      <div class="experience">
-        <h3>Teaching Assistant at NxtWave</h3>
-        <span class="duration">May 2024 - Aug 2024</span>
-        <ul>
-          <li>Solved around 300 student doubts in Full Stack development.</li>
-          <li>Enhanced debugging and communication skills.</li>
-        </ul>
+      <div class="info-box">
+            <p>Developed By <strong>Likhitha, Akshata, Aman</strong> under the Supervisor: <strong>Prof. Abhijit Kshirsagar and Prof. Amar Kumar</strong></p>
       </div>
     </div>
-  </section>
+  
+  <script>
+    // Initialize the Leaflet map
+    var map = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    let tailMarkerGroup = L.layerGroup().addTo(map);
+    var marker;
+    let tail1 = null;
+    let tail2 = null;
+    let tail3 = null;
 
-  <!-- Projects Section -->
-  <section id="projects" class="content-section alt-bg">
-    <div class="section-container">
-      <h2>Projects</h2>
-      <div class="project">
-        <h3>GPS Tracker <small>[Prof. Abhijit]</small></h3>
-        <p>
-          Developed a GPS data collection system using TinyGPS++ and a 4G GSM module, integrated with the ThingSpeak API for real-time tracking.
-        </p>
-        <p><a href="https://peg-iitdh.github.io/EDL2025-GPSTracker/" target="_blank" class="hero-btn">Live Demo</a></p>
-      </div>
-    </div>
-  </section>
+    let selectedStop = null;
+    let notificationSent = false;
+    const NOTIFICATION_RADIUS = 1; 
 
-  <!-- Contact Section -->
-  <section id="contact" class="content-section">
-    <div class="section-container">
-      <h2>Contact</h2>
-      <p>Email: <a href="mailto:220020032@iitdh.ac.in">220020032@iitdh.ac.in</a></p>
-      <p>LinkedIn: <a href="https://www.linkedin.com/in/magham-likhitha" target="_blank">View Profile</a></p>
-    </div>
-  </section>
+    // Initialization of the stops and time according to it
 
-  <!-- Chatbot Modal -->
-  <div id="chatbotModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Resume Chatbot</h2>
-      <div id="chatArea"></div>
-      <input type="text" id="userInput" placeholder="Ask about my experience, skills, or projects" />
-      <button id="sendBtn">Send</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
+    const stops = [
+      { name: "Hostel PC", time: "08:00:00", latitude: 15.48312, longitude: 74.93887 },
+      { name: "Main Gate", time: "08:05:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Bhoopali", time: "08:25:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Jubli Circle", time: "08:40:00",latitude: 15.45807,longitude:  75.00765 },
+      { name: "New Bus Stand Dharwad", time: "08:50:00", latitude: 15.46887, longitude: 74.99317 },
+      { name: "Main Gate", time: "09:10:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Hostel PC", time: "09:20:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Hostel PC", time: "12:10:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "A1-A2 Block", time: "12:15:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "Main Gate", time: "12:20:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Bhoopali", time: "12:40:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "12:45:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Main Gate", time: "13:00:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "A1-A2 Block", time: "13:05:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "Hostel PC", time: "13:10:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Hostel PC", time: "13:25:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "A1-A2 Block", time: "13:28:00", latitude: 15.48519, longitude: 74.93587 },
+      { name: "CLT Stop", time: "13:30:00", latitude: 15.48415, longitude: 74.93517},
+      { name: "Admin Building stop", time: "13:35:00", latitude: 51.5074, longitude: -0.1278 },
+      { name: "A1-A2 Block", time: "13:37:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "Hostel PC", time: "13:40:00", latitude: 15.48312, longitude: 74.93887},
+
+      { name: "A1-A2 Block", time: "13:48:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "CLT Stop", time: "13:50:00",latitude: 15.48415, longitude: 74.93517 },
+      { name: "Admin Building stop", time: "13:55:00", latitude: 51.5074, longitude: -0.1278 },
+      { name: "A1-A2 Block", time: "13:57:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "Hostel PC", time: "14:00:00",latitude: 15.48312, longitude: 74.93887},
+
+      { name: "A1-A2 Block", time: "14:08:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "CLT Stop", time: "14:10:00",latitude: 15.48415, longitude: 74.93517},
+      { name: "Admin Building stop", time: "14:15:00", latitude: 51.5074, longitude: -0.1278 },
+      { name: "A1-A2 Block", time: "14:17:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "Hostel PC", time: "14:20:00", latitude: 15.48312, longitude: 74.93887},
+
+      { name: "A1-A2 Block", time: "14:28:00",latitude: 15.48519, longitude: 74.93587},
+      { name: "CLT Stop", time: "14:30:00",latitude: 15.48415, longitude: 74.93517},
+      { name: "Admin Building stop", time: "14:35:00", latitude: 51.5074, longitude: -0.1278 },
+      { name: "A1-A2 Block", time: "14:37:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "Hostel PC", time: "14:40:00",latitude: 15.48312, longitude: 74.93887},
+
+      { name: "Hostel PC", time: "14:50:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "A1-A2 Block", time: "14:55:00",latitude: 15.48519, longitude: 74.93587},
+      { name: "Main Gate", time: "15:00:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Bhoopali", time: "15:20:00",latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "16:35:00", latitude: 15.52469, longitude:  74.92439},
+      { name: "Main Gate", time: "16:50:00", latitude: 51.5074, longitude: -0.1278 },
+      { name: "A1-A2 Block", time: "16:55:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "Hostel PC", time: "17:00:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Hostel PC", time: "17:15:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "A1-A2 Block", time: "17:20:00",latitude: 15.48519, longitude: 74.93587 },
+      { name: "Main Gate", time: "17:25:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Bhoopali", time: "17:45:00",latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "17:45:00",latitude: 15.52469, longitude:  74.92439},
+      { name: "Main Gate", time: "18:00:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Hostel PC", time: "18:10:00",latitude: 15.48312, longitude: 74.93887},
+      { name: "Main Gate", time: "18:15:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Bhoopali", time: "18:35:00",latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "18:40:00",latitude: 15.52469, longitude:  74.92439 },
+      { name: "New Bus Stand Dharwad", time: "19:00:00", latitude: 15.46887, longitude: 74.99317 },
+      { name: "New Bus Stand Dharwad", time: "19:05:00", latitude: 15.46887, longitude: 74.99317},
+      { name: "Bhoopali", time: "19:25:00",latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "19:30:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Main Gate", time: "19:45:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Hostel PC", time: "20:00:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Hostel PC", time: "20:05:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Main Gate", time: "20:10:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Bhoopali", time: "20:30:00",latitude: 15.52469, longitude:  74.92439},
+      { name: "Bhoopali", time: "20:35:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Main Gate", time: "20:50:00", latitude: 15.48807, longitude: 74.93360 },
+      { name: "Hostel PC", time: "21:05:00", latitude: 15.48312, longitude: 74.93887},
+      {name: "Hostel PC", time: "22:40:00", latitude: 15.48807, longitude: 74.93360 }
+    ];
+    const stop2 = [
+      { name: "Hostel PC", time: "10:00:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Main Gate", time: "10:05:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Bhoopali", time: "10:25:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "New Bus Stand Dharwad", time: "10:45:00",  latitude: 15.46887, longitude: 74.99317 },
+      { name: "New Bus Stand Dharwad", time: "10:50:00", latitude: 15.46887, longitude: 74.99317},
+      { name: "Main Gate", time: "11:10:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Hostel PC", time: "11:20:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Hostel PC", time: "12:30:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Main Gate", time: "12:35:00",latitude: 15.48807, longitude: 74.93360},
+      { name: "Bhoopali", time: "12:55:00",latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "13:00:00",latitude: 15.52469, longitude:  74.92439 },
+      { name: "Main Gate", time: "13:15:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Hostel PC", time: "13:20:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Hostel PC", time: "14:00:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Main Gate", time: "14:05:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Bhoopali", time: "14:25:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "14:30:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Main Gate", time: "14:45:00",latitude: 15.48807, longitude: 74.93360},
+      { name: "Hostel PC", time: "14:50:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Hostel PC", time: "17:15:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "A1-A2 Block", time: "17:20:00",latitude: 15.48519, longitude: 74.93587},
+      { name: "Main Gate", time: "17:25:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Bhoopali", time: "17:45:00",latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "17:45:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Main Gate", time: "18:00:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Hostel PC", time: "18:10:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Main Gate", time: "18:15:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Bhoopali", time: "18:35:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "18:40:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "New Bus Stand Dharwad", time: "19:00:00", latitude: 15.46887, longitude: 74.99317 },
+      { name: "New Bus Stand Dharwad", time: "19:05:00",  latitude: 15.46887, longitude: 74.99317 },
+      { name: "Bhoopali", time: "19:25:00",latitude: 15.52469, longitude:  74.92439 },
+      { name: "Bhoopali", time: "19:30:00",latitude: 15.52469, longitude:  74.92439},
+      { name: "Main Gate", time: "19:45:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Hostel PC", time: "20:00:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Hostel PC", time: "20:05:00", latitude: 15.48312, longitude: 74.93887},
+      { name: "Main Gate", time: "20:10:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Bhoopali", time: "20:30:00", latitude: 15.52469, longitude:  74.92439},
+      { name: "Bhoopali", time: "20:35:00", latitude: 15.52469, longitude:  74.92439 },
+      { name: "Main Gate", time: "20:50:00", latitude: 15.48807, longitude: 74.93360},
+      { name: "Hostel PC", time: "21:05:00", latitude: 15.48312, longitude: 74.93887},
+    ];
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Earth radius in km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c; // Distance in km
+    }
+
+    document.querySelectorAll('.dropdown-content a').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const stopName = this.dataset.stop;
+        // Find the selected stop in stops3
+        selectedStop = stops.find(stop => stop.name === stopName);
+        
+        if (Notification.permission !== 'granted') {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              console.log('Notification permission granted');
+            } else if (permission === 'denied') {
+              console.log('Notification permission denied');
+              alert('Please enable notifications for this site to receive alerts.'); // Prompt user
+            } else if (permission === 'default') {
+              console.log('Notification permission dismissed (default)');
+              // Optionally, provide a way to trigger permission request again
+            }
+          });
+        }
+      });
+    });
+
+    // Function to convert UTC to IST string
+    function convertUTCtoIST(utcDateString) {
+      const utcDate = new Date(utcDateString);
+      const istOptions = { 
+        timeZone: 'Asia/Kolkata',
+        hour12: false,
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      };
+      return utcDate.toLocaleString('en-IN', istOptions);
+    }
+
+    // Function to convert HH:MM:SS to total seconds
+    function timeToSeconds(time) {
+      const [hours, minutes, seconds] = time.split(":").map(Number);
+      return hours * 3600 + minutes * 60 + seconds;
+    }
+
+    // Function to check if the current time is within the given interval
+    function isTimeInInterval(currentTime, startTime, endTime) {
+      const currentSeconds = timeToSeconds(currentTime);
+      const startSeconds = timeToSeconds(startTime);
+      const endSeconds = timeToSeconds(endTime);
+      return currentSeconds >= startSeconds && currentSeconds <= endSeconds;
+    }
+
+    //Function to update marker 
+    function updateTailMarker(newLat, newLng,lastTailMarker) {
+      var sign = L.divIcon({
+        html: '<div style="font-size: 24px; line-height: 30px; text-align: center;">🔹</div>',
+        className: 'emoji-marker',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15] // Centers the icon on the location
+      });
+      // Remove the previous marker if it exists
+      L.marker([newLat, newLng],{ icon: sign }).addTo(tailMarkerGroup); // Add new marker
+    }
+
+    // Function to update map data and determine next stop
+    function updateMapData() {
+      fetch('https://api.thingspeak.com/channels/2500568/feeds.json?api_key=3TVTGFNPIZH5T08Y&results=5')
+      .then(response => response.json())
+      .then(data => {
+        let lastFiveEntries = [];
+        
+        // Iterate over the last 5 entries and store them in an array
+        data.feeds.slice(-5).forEach(feed => {
+          let entry = {
+            latitude: parseFloat(feed.field1),
+            longitude: parseFloat(feed.field2),
+            speed: parseInt(feed.field3),
+            timestamp: feed.created_at
+          };
+          lastFiveEntries.push(entry);
+        });
+
+        // Plot the first 3 points
+        tailMarkerGroup.clearLayers(); // Remove all previous markers in the group
+        if(lastFiveEntries.length > 3){
+          let lat1 = lastFiveEntries[1].latitude;
+          let lon1 = lastFiveEntries[1].longitude;
+          let lat2 = lastFiveEntries[2].latitude;
+          let lon2 = lastFiveEntries[2].longitude;
+          let lat3 = lastFiveEntries[3].latitude;
+          let lon3 = lastFiveEntries[3].longitude;
+          updateTailMarker(lat1,lon1,tail1);
+          updateTailMarker(lat2,lon2,tail2);
+          updateTailMarker(lat3,lon3,tail3);
+        }
+
+          var latestFeed = lastFiveEntries[lastFiveEntries.length - 1];
+          var lat = parseFloat(latestFeed.latitude);
+          var lon = parseFloat(latestFeed.longitude);
+          var spd = parseInt(latestFeed.speed);
+          var lastUpdatedUTC = latestFeed.timestamp;
+          var lastUpdatedIST = convertUTCtoIST(lastUpdatedUTC);
+          let repMsg = "";
+          let next_1_stop_text = "";
+          let next_2_stop_text = "";
+
+          var [date, currtime] = lastUpdatedIST.split(",");
+          currtime = currtime.trim();
+
+          if (selectedStop) {
+          const distance = getDistance(lat, lon, selectedStop.latitude, selectedStop.longitude);
+          console.log('Selected stop:', selectedStop); 
+          console.log('Distance to selected stop:', distance);
+          console.log('notificationSent:', notificationSent);
+          
+          if (distance < NOTIFICATION_RADIUS && !notificationSent) {
+            console.log('Inside the if block!');
+            console.log('Sending notification...');
+            console.log('Notification.permission:', Notification.permission);
+            if (Notification.permission === 'granted') {
+              console.log('Creating notification...');
+              try {
+                new Notification('Test Notification'); // Simplified
+                console.log('Notification created!');
+              } catch (error) {
+                console.error('Error creating notification:', error);
+              }
+              notificationSent = true;
+            }
+          } else if (distance >= NOTIFICATION_RADIUS) {
+            console.log("Resetting not...")
+            notificationSent = false;
+          }
+        }
+
+          // Get real-time IST
+          // Calculate current IST time reliably by adding 5.5 hours to UTC
+        var nowUTC = new Date();
+        var nowIST = new Date(nowUTC.getTime() + 5.5 * 60 * 60 * 1000);
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var currentDay = days[nowIST.getUTCDay()];
+        
+        // Use currentDay to choose the correct stops
+        var stop_thatday;
+        if (currentDay === "Saturday" || currentDay === "Sunday") {
+          stop_thatday = stop2;
+        } else {
+          stop_thatday = stops;
+        }
+          // Determine the next stop
+          var next_stop = stop_thatday[0].name;
+          for (let i = 0; i < stop_thatday.length - 1; i++) {
+            if (isTimeInInterval(currtime, stop_thatday[i].time, stop_thatday[i + 1].time)) {
+              next_stop = `${stop_thatday[i + 1].name} at ${stop_thatday[i+1].time}`;
+             if(i+2 < stop_thatday.length){
+                  next_stop1 = stop_thatday[i+2].name;
+                  next_1_stop_text = `${next_stop1} at ${stop_thatday[i+2].time}`;
+                  next_2_stop_text = "";
+              }
+              if(i+3 < stop_thatday.length){
+                  next_stop1 = stop_thatday[i+2].name;
+                  next_stop2 = stop_thatday[i+3].name;
+                  next_1_stop_text = `${next_stop1} at ${stop_thatday[i+2].time}`;
+                  next_2_stop_text = `${next_stop2} at ${stop_thatday[i+3].time}`;
+              } 
+              if(i === stop_thatday.length-1){
+                  document.getElementById("heading").innerText = "Next Stop";
+              }
+            }
+          }
+          let flag=0;
+          if (timeToSeconds(currtime) > timeToSeconds(stop_thatday[stop_thatday.length - 1].time) || timeToSeconds(currtime)<timeToSeconds(stops[0].time)) {
+            next_stop = "Shuttle service is closed ,The next bus will start from 8:00 AM tomorrow";
+            next_1_stop_text = "";
+            next_2_stop_text = "";
+            flag=1;
+          }
+          // Update marker on the map
+          if (marker) {
+            map.removeLayer(marker);
+          }
+          var emojiIcon = L.divIcon({
+            html: '<div style="font-size: 24px; line-height: 30px; text-align: center;">🚍</div>',
+            className: 'emoji-marker',
+            iconSize: [60, 60],
+            iconAnchor: [15, 15] // Centers the icon on the location
+          });
+
+          marker = L.marker([lat, lon], { icon: emojiIcon }).addTo(map);
+          if(spd>5)
+          {
+            map.setView([lat, lon], 16.5);
+            console.log("1");
+          }
+          else{
+            map.setView([lat, lon], 17.5);
+            console.log("2");
+          }
+          
+          var lastUpdatedDate = new Date(latestFeed.timestamp);
+          var currentDate = new Date();
+          var diffSeconds = (currentDate.getTime() - lastUpdatedDate.getTime()) / 1000;
+          var statu = diffSeconds < 300 ? "Live" : "Not Live";
+          document.getElementById("lastUpdate").innerText = lastUpdatedIST;
+          
+          fetch('https://api.thingspeak.com/channels/2882525/feeds.json?api_key=ONUVVE8QBZ5GH9ZP&results=1')
+            .then(response => response.json())
+            .then(data1 => {
+              if(data1.feeds && data1.feeds.length > 0) {
+                var repMsg = data1.feeds[0].field1;
+              } else {
+                document.getElementById("Status").innerText = "No repair message available.";
+              }
+              if(repMsg === "" || repMsg.toUpperCase() === "OK"){
+                document.getElementById("Status").innerText = statu;
+                document.getElementById("Speed").innerText = spd + " km/h";
+                let ns=document.getElementById("Nextstop");
+                ns.innerText = next_stop;
+                let hd=document.getElementById("heading").style.display = "Block";
+                document.getElementById("next2stops").innerText = next_2_stop_text;
+                document.getElementById("next1stop").innerText = next_1_stop_text;
+                if(flag)
+                {
+                  console.log(flag);
+                  hd.classList.add("yes");
+                  ns.style.color="#de595b";
+                }
+              }
+              else{
+              // When the bus is under repair, show the error messages:
+                let head = "Bus is currently unavailable due to " + repMsg;
+                document.getElementById("Status").innerText = repMsg;
+                document.getElementById("Speed").innerText = "N/A";
+                //document.getElementById("lastUpdate").innerText = "N/A";
+                document.getElementById("Nextstop").style.display = "none";
+                document.getElementById("next1stop").style.display = "none"
+                document.getElementById("next2stops").style.display = "none";
+                document.getElementById("heading").innerText = head;
+              }
+            })
+            .catch(error => {
+              console.error('Fetch Error (Repair Message):', error);
+              document.getElementById("repMsg").style.display = "none";
+            });
+
+        })
+        .catch(error => {
+          console.error('Fetch Error:', error);
+          document.getElementById("lastUpdate").innerText = "Error loading update.";
+          document.getElementById("Speed").innerText = "Error calculating distance.";
+        });
+    }
+
+
+    updateMapData();
+    setInterval(updateMapData, 60000);
+    const savedStop = localStorage.getItem('selectedStop');
+    if (savedStop) {
+      selectedStop = JSON.parse(savedStop);
+      document.getElementById('notificationBadge').style.display = 'inline';
+    }
+  </script>
 </body>
 </html>
