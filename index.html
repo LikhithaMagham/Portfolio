@@ -417,6 +417,25 @@
       });
     });
 
+    if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js')
+              .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+              })
+              .catch(error => {
+                console.log('Service Worker registration failed:', error);
+              });
+          });
+        }
+        function sendNotificationServiceWorker(message) {
+          if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ type: 'notification', message: message });
+          } else {
+            console.warn('Service worker not active, notification cannot be sent.');
+          }
+        }
+
     // Function to convert UTC to IST string
     function convertUTCtoIST(utcDateString) {
       const utcDate = new Date(utcDateString);
@@ -660,5 +679,19 @@
       document.getElementById('notificationBadge').style.display = 'inline';
     }
   </script>
+  <script>
+    //Service worker part
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        });
+    }
+</script>
 </body>
 </html>
