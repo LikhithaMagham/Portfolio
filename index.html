@@ -262,7 +262,7 @@
 
     let selectedStop = null;
     let notificationSent = false;
-    const NOTIFICATION_RADIUS = 1; 
+    const NOTIFICATION_RADIUS = 5; 
 
     // Initialization of the stops and time according to it
 
@@ -517,7 +517,10 @@
             if (Notification.permission === 'granted') {
               console.log('Creating notification...');
               try {
-                new Notification('Test Notification'); // Simplified
+                new Notification("Bus Alert", {
+                 body: `The bus will arrive at ${stopName} in 10 minutes`,
+                 icon: "bus-icon.png"
+               });
                 console.log('Notification created!');
               } catch (error) {
                 console.error('Error creating notification:', error);
