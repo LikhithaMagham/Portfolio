@@ -262,7 +262,7 @@
 
     let selectedStop = null;
     let notificationSent = false;
-    const NOTIFICATION_RADIUS = 5; 
+    const NOTIFICATION_RADIUS = 1; 
 
     // Initialization of the stops and time according to it
 
@@ -312,7 +312,7 @@
       { name: "Main Gate", time: "15:00:00", latitude: 15.48807, longitude: 74.93360 },
       { name: "Bhoopali", time: "15:20:00",latitude: 15.52469, longitude:  74.92439 },
       { name: "Bhoopali", time: "16:35:00", latitude: 15.52469, longitude:  74.92439},
-      { name: "Main Gate", time: "16:50:00", latitude: 51.5074, longitude: -0.1278 },
+      { name: "Main Gate", time: "16:50:00",  latitude: 15.48807, longitude: 74.93360},
       { name: "A1-A2 Block", time: "16:55:00",latitude: 15.48519, longitude: 74.93587 },
       { name: "Hostel PC", time: "17:00:00", latitude: 15.48312, longitude: 74.93887},
       { name: "Hostel PC", time: "17:15:00", latitude: 15.48312, longitude: 74.93887},
@@ -518,7 +518,7 @@
               console.log('Creating notification...');
               try {
                 new Notification("Bus Alert", {
-                 body: `The bus will arrive at ${stopName} in 10 minutes`,
+                 body: `The bus will arrive at ${selectedStop.name} in 10 minutes`,
                  icon: "bus-icon.png"
                });
                 console.log('Notification created!');
