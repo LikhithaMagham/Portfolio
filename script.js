@@ -1,49 +1,81 @@
-<script>
-  // Chatbot Modal Handling
+// Wait for the DOM to load before executing scripts
+document.addEventListener("DOMContentLoaded", () => {
+  
+  // 🔹 Chatbot Modal Handling
   const modal = document.getElementById("chatbotModal");
   const chatbotBtn = document.getElementById("chatbotBtn");
   const closeBtn = document.querySelector(".close");
 
-  chatbotBtn.onclick = () => { 
-    modal.style.display = "block"; 
-  };
-  closeBtn.onclick = () => { 
-    modal.style.display = "none"; 
-  };
-  window.onclick = (e) => { 
-    if (e.target === modal) modal.style.display = "none"; 
-  };
+  if (chatbotBtn && modal && closeBtn) {
+    chatbotBtn.onclick = () => { modal.style.display = "block"; };
+    closeBtn.onclick = () => { modal.style.display = "none"; };
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+  }
 
-  // Simple Chatbot Logic (Keyword-based)
+  // 🔹 Chatbot Response System
   const chatArea = document.getElementById("chatArea");
   const userInput = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
 
-  const responses = [
-    { keywords: ["experience", "nxtwave"], response: "I worked as a Teaching Assistant at NxtWave." },
-    { keywords: ["gps", "tracker"], response: "I developed a GPS Tracker using TinyGPS++." },
-    { keywords: ["skills"], response: "I am skilled in C, C++, Python, JavaScript, and more." }
-  ];
+  if (chatArea && userInput && sendBtn) {
+    const responses = [
+      { keywords: ["experience", "nxtwave"], response: "I worked as a Teaching Assistant at NxtWave." },
+      { keywords: ["gps", "tracker"], response: "I developed a GPS Tracker using TinyGPS++ and a 4G GSM module." },
+      { keywords: ["electrolyzer", "matlab"], response: "I modeled an electrolyzer in Matlab to analyze hydrogen production efficiency." },
+      { keywords: ["skills", "technical"], response: "I am skilled in C, C++, Python, HTML, CSS, SQL, Node.js, and JavaScript." },
+      { keywords: ["education", "iit", "dharwad"], response: "I'm a B.Tech student at IIT Dharwad (2022-Present) with a CPI of 7.01." }
+    ];
 
-  sendBtn.addEventListener("click", () => {
-    const query = userInput.value.toLowerCase().trim();
-    if (!query) return;
+    sendBtn.addEventListener("click", () => {
+      const query = userInput.value.toLowerCase().trim();
+      if (!query) return;
 
-    // Display user message
-    chatArea.innerHTML += `<div>You: ${userInput.value}</div>`;
-    
-    // Get bot response
-    let botReply = "I don't know about that. Ask me about experience, skills, or projects.";
-    for (const pair of responses) {
-      if (pair.keywords.some(k => query.includes(k))) {
-        botReply = pair.response;
-        break;
+      // Display user's message
+      chatArea.innerHTML += `<div><strong>You:</strong> ${userInput.value}</div>`;
+
+      // Determine bot response
+      let botReply = "I don't know about that. Ask me about my experience, education, or projects.";
+      for (const pair of responses) {
+        if (pair.keywords.some(k => query.includes(k))) {
+          botReply = pair.response;
+          break;
+        }
       }
-    }
 
-    // Display bot response
-    chatArea.innerHTML += `<div>Bot: ${botReply}</div>`;
-    userInput.value = "";
-    chatArea.scrollTop = chatArea.scrollHeight;
+      // Display bot's message
+      chatArea.innerHTML += `<div><strong>Bot:</strong> ${botReply}</div>`;
+      userInput.value = "";
+      chatArea.scrollTop = chatArea.scrollHeight;
+    });
+  }
+
+  // 🔹 Smooth Scrolling for Navbar Links
+  const navLinks = document.querySelectorAll("nav ul li a");
+  navLinks.forEach(link => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const targetSection = document.querySelector(link.getAttribute("href"));
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: "smooth" });
+      }
+    });
   });
-</script>
+
+  // 🔹 Highlight Active Navbar Link
+  const sections = document.querySelectorAll("section");
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.classList.remove("active");
+          if (link.getAttribute("href").substring(1) === entry.target.id) {
+            link.classList.add("active");
+          }
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(section => observer.observe(section));
+
+});
