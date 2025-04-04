@@ -1,6 +1,5 @@
-// Wait for the DOM to load before executing scripts
 document.addEventListener("DOMContentLoaded", () => {
-  
+
   // 🔹 Chatbot Modal Handling
   const modal = document.getElementById("chatbotModal");
   const chatbotBtn = document.getElementById("chatbotBtn");
@@ -50,19 +49,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 🔹 Smooth Scrolling for Navbar Links
-  const navLinks = document.querySelectorAll("nav ul li a");
-  navLinks.forEach(link => {
+  document.querySelectorAll("nav ul li a").forEach(link => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
-      const targetSection = document.querySelector(link.getAttribute("href"));
+      const targetId = link.getAttribute("href").substring(1);
+      const targetSection = document.getElementById(targetId);
       if (targetSection) {
         targetSection.scrollIntoView({ behavior: "smooth" });
       }
     });
   });
 
-  // 🔹 Highlight Active Navbar Link
+  // 🔹 Active Section Highlight in Navbar
   const sections = document.querySelectorAll("section");
+  const navLinks = document.querySelectorAll("nav ul li a");
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -74,8 +75,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     });
-  }, { threshold: 0.3 });
+  }, { threshold: 0.5 });
 
   sections.forEach(section => observer.observe(section));
+
+  // 🔹 Handling Other Buttons (If Any)
+  document.querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", () => {
+      console.log(`Button "${button.innerText}" clicked!`);
+      alert(`Button "${button.innerText}" clicked!`);
+    });
+  });
 
 });
