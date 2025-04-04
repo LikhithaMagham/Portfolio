@@ -1,47 +1,49 @@
-// Chatbot Modal Handling
-const modal = document.getElementById("chatbotModal");
-const chatbotBtn = document.getElementById("chatbotBtn");
-const closeBtn = document.querySelector(".close");
+<script>
+  // Chatbot Modal Handling
+  const modal = document.getElementById("chatbotModal");
+  const chatbotBtn = document.getElementById("chatbotBtn");
+  const closeBtn = document.querySelector(".close");
 
-chatbotBtn.onclick = () => { 
-  modal.style.display = "block"; 
-};
-closeBtn.onclick = () => { 
-  modal.style.display = "none"; 
-};
-window.onclick = (e) => { 
-  if (e.target === modal) modal.style.display = "none"; 
-};
+  chatbotBtn.onclick = () => { 
+    modal.style.display = "block"; 
+  };
+  closeBtn.onclick = () => { 
+    modal.style.display = "none"; 
+  };
+  window.onclick = (e) => { 
+    if (e.target === modal) modal.style.display = "none"; 
+  };
 
-// Chatbot Logic
-const chatArea = document.getElementById("chatArea");
-const userInput = document.getElementById("userInput");
-const sendBtn = document.getElementById("sendBtn");
+  // Simple Chatbot Logic (Keyword-based)
+  const chatArea = document.getElementById("chatArea");
+  const userInput = document.getElementById("userInput");
+  const sendBtn = document.getElementById("sendBtn");
 
-const responses = [
-  { keywords: ["experience"], response: "I worked as a Teaching Assistant at NxtWave." },
-  { keywords: ["gps"], response: "I built a GPS tracker with real-time location updates." },
-  { keywords: ["skills"], response: "I have skills in C, C++, Python, HTML, CSS, and JavaScript." }
-];
+  const responses = [
+    { keywords: ["experience", "nxtwave"], response: "I worked as a Teaching Assistant at NxtWave." },
+    { keywords: ["gps", "tracker"], response: "I developed a GPS Tracker using TinyGPS++." },
+    { keywords: ["skills"], response: "I am skilled in C, C++, Python, JavaScript, and more." }
+  ];
 
-sendBtn.addEventListener("click", () => {
-  const query = userInput.value.toLowerCase().trim();
-  if (!query) return;
+  sendBtn.addEventListener("click", () => {
+    const query = userInput.value.toLowerCase().trim();
+    if (!query) return;
 
-  const userMsg = document.createElement("div");
-  userMsg.textContent = "You: " + userInput.value;
-  chatArea.appendChild(userMsg);
-
-  let botReply = "I’m not sure about that. Ask me about my skills or experience.";
-  for (const pair of responses) {
-    if (pair.keywords.some(k => query.includes(k))) {
-      botReply = pair.response;
-      break;
+    // Display user message
+    chatArea.innerHTML += `<div>You: ${userInput.value}</div>`;
+    
+    // Get bot response
+    let botReply = "I don't know about that. Ask me about experience, skills, or projects.";
+    for (const pair of responses) {
+      if (pair.keywords.some(k => query.includes(k))) {
+        botReply = pair.response;
+        break;
+      }
     }
-  }
 
-  const botMsg = document.createElement("div");
-  botMsg.textContent = "Bot: " + botReply;
-  chatArea.appendChild(botMsg);
-  userInput.value = "";
-});
+    // Display bot response
+    chatArea.innerHTML += `<div>Bot: ${botReply}</div>`;
+    userInput.value = "";
+    chatArea.scrollTop = chatArea.scrollHeight;
+  });
+</script>
